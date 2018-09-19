@@ -1,0 +1,26 @@
+{
+  "name": "basket",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "apollo-boost": "^0.1.16",
+    "apollo-link-state": "^0.4.2",
+    "axios": "^0.18.0",
+    "cheerio": "^1.0.0-rc.2",
+    "graphql": "^14.0.2",
+    "react": "^16.4.2",
+    "react-apollo": "^2.1.11",
+    "react-copy-to-clipboard": "^5.0.1",
+    "react-dom": "^16.4.2",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1",
+    "react-scripts": "1.1.5",
+    "reactjs-popup": "^1.2.0"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
