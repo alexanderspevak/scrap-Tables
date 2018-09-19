@@ -14,7 +14,6 @@ class ProductName extends Component {
     onSubmit(e){
         e.preventDefault();
         let row=this.props.row
-        console.log('row',row)
         write(`Sheet2!C${row}:C${row}`,this.state.value)
         this.setState({data:this.state.value})
         

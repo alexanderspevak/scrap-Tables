@@ -26,7 +26,7 @@ class UrlCell extends Component {
                     if (Array.isArray(res.data)) {
                         const arrayOfEmpty = Array(9 - res.data.length).fill('empty')
                         const fillArray = [...res.data, ...arrayOfEmpty]
-                        this.props.setImages(fillArray);
+                        this.props.setImages(fillArray,'images');
                         writeMultipleRanges(`Sheet2!$O${start}:W${end}`, fillArray, end - start + 1,'COLUMNS')
                     } else {
                         alert('invalid response from server')

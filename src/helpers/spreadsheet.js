@@ -19,7 +19,6 @@ export function load(callback) {
   });
 }
 export function write(range, values) {
-  console.log('prislo sem', range,values)
   window.gapi.client.sheets.spreadsheets.values.update({
     spreadsheetId: config.spreadsheetId,
     range,

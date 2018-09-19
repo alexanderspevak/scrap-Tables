@@ -23,15 +23,12 @@ static getDerivedStateFromProps(nextProps, prevState){
   var showAll=nextProps.location.pathname.split('/')[1]==='sizes'?true:false
   var page=parseInt(nextProps.location.pathname.split('/')[2]); 
   if(showAll!==prevState.showAll||page!==prevState.page){
-    console.log('redirect starts here')
     return { showAll,page};
  }
  else return null;
 }
   componentDidMount() {
     window.gapi.load("client", this.initClient);
-
-      console.log('pathNamesplit',this.props.location.pathname.split('/'))
       var pagepath
       this.setState()
 
@@ -71,7 +68,6 @@ static getDerivedStateFromProps(nextProps, prevState){
     this.props.history.push(url)
   }
   render() {
-    console.log('pathName',this.props.location.pathname)
     var prevRowKod
     var columnGroupIndex = -1;
     const { data, error } = this.state;

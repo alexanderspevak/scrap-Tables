@@ -31,7 +31,6 @@ const cache=new InMemoryCache({
           }
             `;
           const newItem=variables.input;
-          console.log('new Item', newItem)
           const previousState=cache.readQuery({query});    
             const data={
               ...previousState,
