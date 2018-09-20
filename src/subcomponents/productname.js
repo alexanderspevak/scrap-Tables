@@ -16,7 +16,6 @@ class ProductName extends Component {
         let row=this.props.row
         write(`Sheet2!C${row}:C${row}`,this.state.value)
         this.setState({data:this.state.value})
-        
       }
       handleChange(event) {
         this.setState({ value: event.target.value })

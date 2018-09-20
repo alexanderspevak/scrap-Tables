@@ -17,11 +17,9 @@ class App extends Component {
       page: 1,
     };
   }
-
-
 static getDerivedStateFromProps(nextProps, prevState){
   var showAll=nextProps.location.pathname.split('/')[1]==='sizes'?true:false
-  var page=parseInt(nextProps.location.pathname.split('/')[2]); 
+  var page=parseInt(nextProps.location.pathname.split('/')[2],10); 
   if(showAll!==prevState.showAll||page!==prevState.page){
     return { showAll,page};
  }
@@ -29,8 +27,6 @@ static getDerivedStateFromProps(nextProps, prevState){
 }
   componentDidMount() {
     window.gapi.load("client", this.initClient);
-      var pagepath
-      this.setState()
 
   }
   initClient = () => {

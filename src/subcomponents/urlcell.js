@@ -12,7 +12,6 @@ class UrlCell extends Component {
         this.onSubmit = this.onSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
     }
-
     onSubmit(event) {
         var { start, end } = this.props.range
         if (this.state.value.includes('http://www.basket-obchod.cz/')) {

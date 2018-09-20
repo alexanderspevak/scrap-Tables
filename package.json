@@ -1,7 +1,6 @@
 {
   "name": "basket",
   "email":"alexander.spevak@gmail.com",
-  "homepage": "http://alexanderspevak.github.io/basketfront",
   "version": "0.1.0",
   "private": true,
   "dependencies": {

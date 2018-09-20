@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import App from './App.js';
+import HomePage from './homepage'
 import { client, sizeQuery } from './apollo/client&queries'
-import { BrowserRouter, Route } from 'react-router-dom'
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
 
 class Main extends Component {
     constructor(props) {
@@ -28,10 +29,14 @@ class Main extends Component {
     render() {
         return (
             <BrowserRouter>
-                <Route path="/:colorsSizes/:userId" 
-                  render={(props) => <App {...props} sizes={this.state.sizes} />}
-                 />
-            </BrowserRouter>
+                    <Switch>
+                        <Route exact path="/" component={HomePage} />
+                        <Route 
+                            path="/:colorsSizes/:userId"
+                            render={(props) => <App {...props} sizes={this.state.sizes} />}
+                        />
+                    </Switch>
+                </BrowserRouter>
         )
     }
 }
