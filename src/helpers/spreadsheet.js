@@ -39,7 +39,6 @@ export function writeMultipleRanges(range, values, size, fillType) {
     data: data,
     valueInputOption: 'RAW',
   };
-  console.log('body',body)
   window.gapi.client.sheets.spreadsheets.values.batchUpdate({
     spreadsheetId: config.spreadsheetId,
     resource: body

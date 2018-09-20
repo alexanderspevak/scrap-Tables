@@ -59,7 +59,7 @@ class Row extends Component {
                     )
                 } else if (index === 6) {
                     return (
-                        <React.Fragment>
+                        <React.Fragment key={'Fragment'+index+''+sheetRowLessOne}>
                             {showAll && <SizeCell
                                 data={sizes}
                                 range={sheetRowLessOne + 1}
