@@ -47,7 +47,6 @@ class ClickCellSize extends Component {
     handleChange(params, event) {
         this.setState({ [params.key]: event.target.value })
         if(params.value){
-            console.log('params value',params.value.value.cs)
             var thirdLevelSubmit=JSON.stringify(params.value.value.cs)
             thirdLevelSubmit=thirdLevelSubmit.replace(/\"/g, "")
             thirdLevelSubmit=thirdLevelSubmit.replace("{", "")
@@ -104,9 +103,9 @@ class ClickCellSize extends Component {
 
         return (
             <td >
-                <Popup trigger={<button> Sizes</button>} position="right center">
+                <Popup className='popup' trigger={<button> Sizes</button>} position="right center">
                     {
-                        <div>
+                        <div className='popup'>
                             {(this.state.showButtons === 1) && firstLevelTitles}
                             {(this.state.showButtons === 2) && secondLevelTitles}
                      

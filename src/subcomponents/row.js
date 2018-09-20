@@ -19,8 +19,7 @@ class Row extends Component {
             fillArray = arrayOfEmpty;
         }
         this.setState({ [key]: fillArray })
-    }
-
+    }   
     render() {
         var {
             row,

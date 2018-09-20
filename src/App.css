@@ -51,23 +51,10 @@ table, th, td {
 .clickedButton{
   background-color:lightblue
 }
-.mm-popup {
-
-  background-color: blue;
-  width:700px;
-}
-
 .popup {
-  position: relative;
-  display: inline-block;
-  cursor: pointer;
+  background-color:white;
+  margin-top:70px;
+  width:700px;
+  height:auto
 }
-.popup_inner {
-  position: absolute;
-  left: 25%;
-  right: 25%;
-  top: 25%;
-  bottom: 25%;
-  margin: auto;
-  background: white;
-}
+
