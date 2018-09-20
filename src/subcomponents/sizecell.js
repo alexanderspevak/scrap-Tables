@@ -7,117 +7,119 @@ class ClickCellSize extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            firstLevelTitle: 'empty',
-            secondLevelTitle: 'empty',
-            thirdLevelTitle: 'empty',
+            firstLevelSubmit: 'empty',
+            secondLevelSubmit: 'empty',
+            thirdLevelSubmit: 'empty',
             showButtons: 1,
             inputValue: '',
             cellValue: this.props.data,
-            value: ''
+            value: '',
+         
         };
         this.onClick = this.onClick.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
-        this.handleChange = this.handleChange.bind(this);
+        this.handleChange = this.handleChange.bind(this);   
     }
-    onClick(operation, thirdLevelTitle) {
+    onClick(operation) {
         if (operation === '+') {
             this.setState({ showButtons: this.state.showButtons + 1 }, () => {
             })
         }
         if (operation === '-') {
             this.setState({ showButtons: this.state.showButtons - 1 })
-            if (this.state.thirdLevelTitle !== 'empty') {
-                this.setState({ thirdLevelTitle: 'empty' })
+            if (this.state.thirdLevelSubmit !== 'empty') {
+                this.setState({ thirdLevelSubmit: 'empty' })
             } else {
-                this.setState({ secondLevelTitle: 'empty' })
+                this.setState({ secondLevelSubmit: 'empty' })
             }
         }
         if (operation === 'submit') {
-            this.setState({ thirdLevelTitle }, () => {
                 this.onSubmit()
-            })
         }
     }
     onSubmit() {
-        var { firstLevelTitle, secondLevelTitle, thirdLevelTitle } = this.state;
-        writeMultipleRanges(`Sheet2!H${this.props.range}:J${this.props.range}`, [firstLevelTitle, secondLevelTitle, thirdLevelTitle], 1, 'COLUMNS')
-        
+        var { firstLevelSubmit, secondLevelSubmit, thirdLevelSubmit } = this.state;
+        writeMultipleRanges(`Sheet2!H${this.props.range}:J${this.props.range}`, [firstLevelSubmit, secondLevelSubmit, thirdLevelSubmit], 1, 'COLUMNS')
         const arrayOfEmpty = Array(6).fill('empty')
-        const fillArray = [firstLevelTitle,secondLevelTitle,thirdLevelTitle, ...arrayOfEmpty]
-        this.props.setImages(fillArray,'sizes');
+        const fillArray = [firstLevelSubmit, secondLevelSubmit, thirdLevelSubmit, ...arrayOfEmpty]
+        this.props.setRenderedImages(fillArray, 'sizes');
     }
-    handleChange(key, event) {
-        this.setState({ [key]: event.target.value })
+    handleChange(params, event) {
+        this.setState({ [params.key]: event.target.value })
+        if(params.value){
+            console.log('params value',params.value.value.cs)
+            var thirdLevelSubmit=JSON.stringify(params.value.value.cs)
+            thirdLevelSubmit=thirdLevelSubmit.replace(/\"/g, "")
+            thirdLevelSubmit=thirdLevelSubmit.replace("{", "")
+            thirdLevelSubmit=thirdLevelSubmit.replace("}", "")
+            this.setState({thirdLevelSubmit:thirdLevelSubmit})
+        }
     }
     render() {
-        const firstLevelTitles = this.props.data.map((level, index) => {
+        const firstLevelSorted=this.props.data.map((level)=>level.title).sort()
+        const firstLevelTitles = firstLevelSorted.map((level, index) => {
             return (
-            <form key={'firstLevel'+index}>
-                <div>
-                    <label>
-                        <input type="radio"
-                            value={level.title}
-                            checked={this.state.firstLevelTitle === level.title}
-                            onChange={this.handleChange.bind(this, 'firstLevelTitle')}
-                        />
-                        {level.title}
-                    </label>
-                </div>
-            </form>
+                <form key={'firstLevel' + index}>
+                    <div>
+                        <label>
+                            <input type="radio"
+                                value={level}
+                                checked={this.state.firstLevelSubmit === level}
+                                onChange={this.handleChange.bind(this, {key:'firstLevelSubmit'})}
+                            />
+                            {level}
+                        </label>
+                    </div>
+                </form>
             )
         })
         const secondLevel = this.props.data.filter((level) => {
-            return level.title === this.state.firstLevelTitle
+            return level.title === this.state.firstLevelSubmit
         })
         var secondLevelTitles = (<div>empty</div>)
         if (secondLevel.length > 0) {
             secondLevelTitles = secondLevel[0].values.map((level, index) => {
+                let thirdLevelShowed=JSON.stringify(level.value.cs).replace(/\"/g, "")
+                thirdLevelShowed=thirdLevelShowed.replace('{',"")
+                thirdLevelShowed=thirdLevelShowed.replace('}',"")
                 return (
-                    <form key={'secondLevel'+index}>
-                        <div>
-                            <label>
-                                <input type="radio"
-                                    value={level.title}
-                                    checked={this.state.secondLevelTitle === level.title}
-                                    onChange={this.handleChange.bind(this, 'secondLevelTitle')}
-                                />
-                                {level.title}
-                            </label>
-                        </div>
-                    </form>)
+                    <div>
+                        <form key={'secondLevel' + index}>
+                            <div>
+                                <label>
+                                    <input type="radio"
+                                        value={level.title}
+                                        checked={this.state.secondLevelSubmit === level.title}
+                                        onChange={this.handleChange.bind(this, {key:'secondLevelSubmit',value:level})}
+                                    />
+                                    {level.title}
+                                </label>
+                            </div>
+                        </form>
+                          {thirdLevelShowed} 
+                    </div>
+                )
             })
         }
-        if (this.state.secondLevelTitle !== 'empty') {
-            var thirdLevel = secondLevel[0].values.filter((level) => {
-                return level.title === this.state.secondLevelTitle
-            })[0].value.cs
-            var thirdLevelRender = '';
-            for (var p in thirdLevel) {
-                if (thirdLevel.hasOwnProperty(p)) {
-                    thirdLevelRender += p + ' : ' + thirdLevel[p] + ', '
-                }
-            }
-        } else {
-            thirdLevelRender = 'empty';
-        }
+
         return (
-            <td onClick={this.onClick}>
+            <td >
                 <Popup trigger={<button> Sizes</button>} position="right center">
                     {
                         <div>
                             {(this.state.showButtons === 1) && firstLevelTitles}
                             {(this.state.showButtons === 2) && secondLevelTitles}
-                            {(this.state.showButtons === 3) && thirdLevelRender}
+                     
                             {(this.state.showButtons > 1) && (
                                 <button onClick={this.onClick.bind(this, '-', )}>
                                     {'<<<'}previous
                                 </button>)}
-                            {(this.state.showButtons < 3) && (
+                            {(this.state.showButtons < 2) && (
                                 <button onClick={this.onClick.bind(this, '+')}>
                                     next >>>
                                 </button>)}
-                            {(this.state.showButtons === 3) && (
-                                <button onClick={this.onClick.bind(this, 'submit', thirdLevelRender)}>
+                            {(this.state.showButtons === 2) && (
+                                <button onClick={this.onClick.bind(this, 'submit')}>
                                     submit
                                 </button>)}
                         </div>

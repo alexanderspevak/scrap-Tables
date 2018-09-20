@@ -8,9 +8,9 @@ class Row extends Component {
             images: [],
             sizes: [],
         };
-        this.setImages = this.setImages.bind(this)
+        this.setRendered = this.setRendered.bind(this)
     }
-    setImages(scrapImgArr, key) {
+    setRendered(scrapImgArr, key) {
         const arrayOfEmpty = Array(9 - scrapImgArr.length).fill('empty')
         let fillArray = [];
         if (scrapImgArr.length) {
@@ -31,6 +31,9 @@ class Row extends Component {
             sizes
         } = this.props.propsObj;
         const rowFill = row.map((cell, index) => {
+            if(cell==='empty'){
+                cell='–'
+            }
             if (
                 index === 0 ||
                 index === 1 ||
@@ -63,12 +66,12 @@ class Row extends Component {
                             {showAll && <SizeCell
                                 data={sizes}
                                 range={sheetRowLessOne + 1}
-                                setImages={this.setImages}
+                                setRenderedImages={this.setRendered}
                             />}
                             {!showAll && <UrlCell
                                 data={cell}
                                 range={{ start: sheetRowLessOne + 1, end: columnGroupEndRows[columnGroupIndex] }}
-                                setImages={this.setImages}
+                                setRenderedUrls={this.setRendered}
                             />}
                             <FinishedButton row={sheetRowLessOne + 1} />
                         </React.Fragment>

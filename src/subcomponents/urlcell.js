@@ -6,16 +6,13 @@ class UrlCell extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            show: false,
+      
             value: ''
         };
-        this.onClick = this.onClick.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
     }
-    onClick() {
-        this.setState({ show: true })
-    }
+
     onSubmit(event) {
         var { start, end } = this.props.range
         if (this.state.value.includes('http://www.basket-obchod.cz/')) {
@@ -26,7 +23,7 @@ class UrlCell extends Component {
                     if (Array.isArray(res.data)) {
                         const arrayOfEmpty = Array(9 - res.data.length).fill('empty')
                         const fillArray = [...res.data, ...arrayOfEmpty]
-                        this.props.setImages(fillArray,'images');
+                        this.props.setRenderedUrls(fillArray,'images');
                         writeMultipleRanges(`Sheet2!$O${start}:W${end}`, fillArray, end - start + 1,'COLUMNS')
                     } else {
                         alert('invalid response from server')
@@ -42,18 +39,18 @@ class UrlCell extends Component {
         event.preventDefault();
     }
     render() {
+        const checker=this.props.data==='–'
         return (
-        <td onClick={this.onClick}>
-            {this.props.data && <div style={{ width: 250, height: 76, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'block' }}>
-                <a href={this.props.data} target="_blank">{this.props.data}</a>
+        <td >
+            {<div style={{ width: 250, height: 76, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'block' }}>
+               {checker?'–':<a href={this.props.data} target="_blank">{this.props.data}</a>}
             </div>}
-            {this.state.show &&
                 <form onSubmit={this.onSubmit}>
                     <label>
                         <input type="text" value={this.state.value} onChange={this.handleChange} />
                     </label>
-                    <input type="submit" value="Submit" />
-                </form>}
+                    <input type="submit" value="Submit product link" />
+                </form>
         </td>)
     }
 }

@@ -37,15 +37,20 @@ class ClickCellColor extends Component {
         event.preventDefault();
     }
     render() {
+        var value=this.state.cellValue;
+        if(value='empty'){
+            value='—'
+        }
         return (
+            
         <td >
+            {this.state.cellValue}
             <form onSubmit={this.onSubmit}>
                 <label>
                     <input type="text" value={this.state.value} onChange={this.handleChange} />
                     </label>
                     <input type="submit" value="Submit" />
             </form>
-            {this.state.cellValue}
         </td>
         )
     }
