@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 import { writeMultipleRanges } from '../helpers/spreadsheet'
-import Popup from "reactjs-popup";
+import { Modal, Button } from 'antd';
 
 class ClickCellSize extends Component {
     constructor(props) {
@@ -14,11 +14,17 @@ class ClickCellSize extends Component {
             inputValue: '',
             cellValue: this.props.data,
             value: '',
-         
+            showModal: false,
+            visitedCell:false
         };
         this.onClick = this.onClick.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
-        this.handleChange = this.handleChange.bind(this);   
+        this.handleChange = this.handleChange.bind(this);
+        this.showModal = this.showModal.bind(this)
+    }
+    showModal(style) {
+        console.log(style)
+        this.setState({ showModal: !this.state.showModal })
     }
     onClick(operation) {
         if (operation === '+') {
@@ -33,29 +39,30 @@ class ClickCellSize extends Component {
                 this.setState({ secondLevelSubmit: 'empty' })
             }
         }
-        if (operation === 'submit') {
-                this.onSubmit()
-        }
     }
     onSubmit() {
         var { firstLevelSubmit, secondLevelSubmit, thirdLevelSubmit } = this.state;
         writeMultipleRanges(`Sheet2!H${this.props.range}:J${this.props.range}`, [firstLevelSubmit, secondLevelSubmit, thirdLevelSubmit], 1, 'COLUMNS')
         const arrayOfEmpty = Array(6).fill('empty')
         const fillArray = [firstLevelSubmit, secondLevelSubmit, thirdLevelSubmit, ...arrayOfEmpty]
-        this.props.setRenderedImages(fillArray, 'sizes');
+        this.props.setRenderedSizes(fillArray, 'sizes');
+        this.setState({ showModal: false,visitedCell:true })
+        
     }
     handleChange(params, event) {
         this.setState({ [params.key]: event.target.value })
-        if(params.value){
-            var thirdLevelSubmit=JSON.stringify(params.value.value.cs)
-            thirdLevelSubmit=thirdLevelSubmit.replace(/\"/g, "")
-            thirdLevelSubmit=thirdLevelSubmit.replace("{", "")
-            thirdLevelSubmit=thirdLevelSubmit.replace("}", "")
-            this.setState({thirdLevelSubmit:thirdLevelSubmit})
+        if (params.value) {
+            var thirdLevelSubmit = JSON.stringify(params.value.value.cs)
+            thirdLevelSubmit = thirdLevelSubmit.replace(/\"/g, "")
+            thirdLevelSubmit = thirdLevelSubmit.replace("{", "")
+            thirdLevelSubmit = thirdLevelSubmit.replace("}", "")
+            this.setState({ thirdLevelSubmit: thirdLevelSubmit }, () => {
+                this.onSubmit()
+            })
         }
     }
     render() {
-        const firstLevelSorted=this.props.data.map((level)=>level.title).sort()
+        const firstLevelSorted = this.props.data.map((level) => level.title).sort()
         const firstLevelTitles = firstLevelSorted.map((level, index) => {
             return (
                 <form key={'firstLevel' + index}>
@@ -64,7 +71,7 @@ class ClickCellSize extends Component {
                             <input type="radio"
                                 value={level}
                                 checked={this.state.firstLevelSubmit === level}
-                                onChange={this.handleChange.bind(this, {key:'firstLevelSubmit'})}
+                                onChange={this.handleChange.bind(this, { key: 'firstLevelSubmit' })}
                             />
                             {level}
                         </label>
@@ -78,9 +85,9 @@ class ClickCellSize extends Component {
         var secondLevelTitles = (<div>empty</div>)
         if (secondLevel.length > 0) {
             secondLevelTitles = secondLevel[0].values.map((level, index) => {
-                let thirdLevelShowed=JSON.stringify(level.value.cs).replace(/\"/g, "")
-                thirdLevelShowed=thirdLevelShowed.replace('{',"")
-                thirdLevelShowed=thirdLevelShowed.replace('}',"")
+                let thirdLevelShowed = JSON.stringify(level.value.cs).replace(/\"/g, "")
+                thirdLevelShowed = thirdLevelShowed.replace('{', "")
+                thirdLevelShowed = thirdLevelShowed.replace('}', "")
                 return (
                     <div>
                         <form key={'secondLevel' + index}>
@@ -89,41 +96,51 @@ class ClickCellSize extends Component {
                                     <input type="radio"
                                         value={level.title}
                                         checked={this.state.secondLevelSubmit === level.title}
-                                        onChange={this.handleChange.bind(this, {key:'secondLevelSubmit',value:level})}
+                                        onChange={this.handleChange.bind(this, { key: 'secondLevelSubmit', value: level })}
                                     />
-                                    {level.title}
+                                    <span style={{ fontWeight: "bold" }}>{level.title}:</span>{thirdLevelShowed}
                                 </label>
                             </div>
                         </form>
-                          {thirdLevelShowed} 
                     </div>
                 )
             })
         }
-
+        var style = (this.state.visitedCell ? { backgroundColor: 'gray' } : { backgroundColor: 'white' })
+        var productName = this.props.productName
+        if (this.state.firstLevelSubmit !== 'empty') {
+            productName = (
+                <div>
+                    <h3>{this.props.productName}</h3>
+                    <h5>{this.state.firstLevelSubmit}</h5>
+                </div>)
+        }
         return (
-            <td >
-                <Popup className='popup' trigger={<button> Sizes</button>} position="right center">
+            <td style={style}>
+                <Modal
+                    title={productName}
+                    visible={this.state.showModal}
+                    onCancel={this.showModal}
+                    footer={[
+                        (this.state.showButtons > 1) &&
+                        <Button key="previous" type="primary" onClick={this.onClick.bind(this, '-')}>
+                            {'<<<'}previous
+                        </Button>,
+                        (this.state.showButtons < 2) &&
+                        <Button key="next" type="primary" onClick={this.onClick.bind(this, '+')}>
+                            next >>>
+                        </Button>,
+
+                    ]}
+                >
                     {
-                        <div className='popup'>
+                        <div>
                             {(this.state.showButtons === 1) && firstLevelTitles}
                             {(this.state.showButtons === 2) && secondLevelTitles}
-                     
-                            {(this.state.showButtons > 1) && (
-                                <button onClick={this.onClick.bind(this, '-', )}>
-                                    {'<<<'}previous
-                                </button>)}
-                            {(this.state.showButtons < 2) && (
-                                <button onClick={this.onClick.bind(this, '+')}>
-                                    next >>>
-                                </button>)}
-                            {(this.state.showButtons === 2) && (
-                                <button onClick={this.onClick.bind(this, 'submit')}>
-                                    submit
-                                </button>)}
                         </div>
                     }
-                </Popup>
+                </Modal>
+                <button onClick={this.showModal.bind(this, style)}> Select Sizes</button>
             </td>
         )
     }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { UrlCell, ColorsCell, SizeCell, FinishedButton, Img, ProductName, SizeSpecifics } from './index';
+import { UrlCell, ColorsCell, SizeCell, FinishedButton, Img, ProductName, SizeSpecifics, Categories } from './index';
 
 class Row extends Component {
     constructor(props) {
@@ -8,7 +8,7 @@ class Row extends Component {
             images: [],
             sizes: [],
         };
-        this.setRendered = this.setRendered.bind(this)
+        this.setRendered = this.setRendered.bind(this);
     }
     setRendered(scrapImgArr, key) {
         const arrayOfEmpty = Array(9 - scrapImgArr.length).fill('empty')
@@ -19,8 +19,9 @@ class Row extends Component {
             fillArray = arrayOfEmpty;
         }
         this.setState({ [key]: fillArray })
-    }   
+    }
     render() {
+        var productName = 'empty'
         var {
             row,
             columnGroupEndRows,
@@ -29,9 +30,14 @@ class Row extends Component {
             showAll,
             sizes
         } = this.props.propsObj;
+
         const rowFill = row.map((cell, index) => {
-            if(cell==='empty'){
-                cell='–'
+            console.log('row 24', row[25])
+            if (index === 2) {
+                productName = cell
+            }
+            if (cell === 'empty') {
+                cell = '–'
             }
             if (
                 index === 0 ||
@@ -61,11 +67,12 @@ class Row extends Component {
                     )
                 } else if (index === 6) {
                     return (
-                        <React.Fragment key={'Fragment'+index+''+sheetRowLessOne}>
+                        <React.Fragment key={'Fragment' + index + '' + sheetRowLessOne}>
                             {showAll && <SizeCell
                                 data={sizes}
                                 range={sheetRowLessOne + 1}
-                                setRenderedImages={this.setRendered}
+                                setRenderedSizes={this.setRendered}
+                                productName={productName}
                             />}
                             {!showAll && <UrlCell
                                 data={cell}
@@ -73,6 +80,11 @@ class Row extends Component {
                                 setRenderedUrls={this.setRendered}
                             />}
                             <FinishedButton row={sheetRowLessOne + 1} />
+                            {!showAll && <Categories
+                                categories={this.props.categories}
+                                value={row[23]}
+                                range={{ start: sheetRowLessOne + 1, end: columnGroupEndRows[columnGroupIndex] }}
+                            />}
                         </React.Fragment>
                     )
                 } else if (index === 5 && !showAll) {

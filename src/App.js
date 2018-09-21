@@ -93,7 +93,7 @@ static getDerivedStateFromProps(nextProps, prevState){
             sizes:this.props.sizes
           }
           return (
-              <Row propsObj={propsObj} key={'Row'+sheetRowLessOne+prevRowKod}/>
+              <Row propsObj={propsObj} key={'Row'+sheetRowLessOne+prevRowKod} categories={this.props.categories}/>
             )
         }
         return undefined;

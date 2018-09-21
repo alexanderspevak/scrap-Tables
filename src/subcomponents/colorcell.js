@@ -28,7 +28,7 @@ class ClickCellColor extends Component {
             var { start, end } = this.props.range
                 writeMultipleRanges(`Sheet2!F${start}:F${end}`, [this.state.inputValue], end - start + 1,'COLUMNS')
         }else{
-            alert('valid colors are red,green,blue,pink,yellow,white,gray,red,purple separated by coma')
+            alert('valid colors are red,green,blue,pink,yellow,white,gray,red,purple separated by coma');
         }
         event.preventDefault();
     }

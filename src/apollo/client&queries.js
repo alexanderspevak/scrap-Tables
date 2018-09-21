@@ -6,6 +6,10 @@ export const client = new ApolloClient({
 });     
 
 
+export const client2=new ApolloClient({
+  uri:"http://46.101.199.39:90/graphql"
+})
+
 export const sizeQuery=gql`
   query {
     attributes{
@@ -22,3 +26,14 @@ export const sizeQuery=gql`
     }
   }
   `
+
+  export const attributesQuery=gql`
+  query {
+    categories{
+      id
+      title
+      parentCategory{
+        id
+      }
+    }
+  }`

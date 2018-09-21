@@ -10,8 +10,6 @@ class FinishedButton extends Component {
         };
         this.onSubmit=this.onSubmit.bind(this)
     }
-
-
     onSubmit(){
         let row=this.props.row
         write(`Sheet2!AA${row}:AA${row}`,'finished')
