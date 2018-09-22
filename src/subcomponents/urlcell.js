@@ -6,8 +6,8 @@ class UrlCell extends Component {
     constructor(props) {
         super(props);
         this.state = {
-      
-            value: ''
+            value: '',
+            style:'white'
         };
         this.onSubmit = this.onSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -16,7 +16,7 @@ class UrlCell extends Component {
         var { start, end } = this.props.range
         if (this.state.value.includes('http://www.basket-obchod.cz/')) {
             writeMultipleRanges(`Sheet2!G${start}:G${end}`, [this.state.value], end - start + 1,'COLUMNS')
-            this.setState({ show: false })
+            this.setState({ show: false,style:'gray' })
             axios.get(`http://basketobchod-basketobchod.a3c1.starter-us-west-1.openshiftapps.com/test/params?ref=${this.state.value}`)
                 .then((res) => {
                     if (Array.isArray(res.data)) {
@@ -39,8 +39,9 @@ class UrlCell extends Component {
     }
     render() {
         const checker=this.props.data==='–'
+        var style={backgroundColor:this.state.style}
         return (
-        <td >
+        <td style={style}>
             {<div style={{ width: 250, height: 76, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', display: 'block' }}>
                {checker?'–':<a href={this.props.data} target="_blank">{this.props.data}</a>}
             </div>}

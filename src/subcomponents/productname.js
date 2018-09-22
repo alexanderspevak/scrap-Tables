@@ -6,7 +6,8 @@ class ProductName extends Component {
         super(props);
         this.state = {
             value: '',
-            data:this.props.data
+            data:this.props.data,
+            style:'white'
         };
         this.onSubmit = this.onSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
@@ -15,14 +16,16 @@ class ProductName extends Component {
         e.preventDefault();
         let row=this.props.row
         write(`Sheet2!C${row}:C${row}`,this.state.value)
-        this.setState({data:this.state.value})
+        this.setState({data:this.state.value,style:'gray'})
+        
       }
       handleChange(event) {
         this.setState({ value: event.target.value })
     }
     render() {
+        var style={backgroundColor:this.state.style}
         return (
-            <td>
+            <td style={style}>
                 {this.state.data}
                 <form onSubmit={this.onSubmit}>
                     <label>

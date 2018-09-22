@@ -20,6 +20,7 @@ class Categories extends Component {
             var { start, end } = this.props.range
             writeMultipleRanges(`Sheet2!X${start}:Y${end}`, [this.state.categoryTitle, this.state.categoryId], end - start + 1, 'COLUMNS')
         })
+        this.setState({style:true})
         this.showModal()
     }
     prepareCategoriesForRender(categories, margin) {
@@ -55,15 +56,14 @@ class Categories extends Component {
         if (value === 'empty') {
             value = ''
         }
-        var style = { backsroundColor: "white" }
+        var style = { backgroundColor: 'white' }
         if (this.state.style) {
-            style = { backsroundColor: "gray" }
+            style = { backgroundColor: 'gray'}
         }
         var categories = this.props.categories;
         var renderedCategories = this.prepareCategoriesForRender(categories, -30)
         return (
             <td style={style}>
-
                 {this.state.categoryTitle ? this.state.categoryTitle : value}
                 <Modal
                     title={'Select Category'}
@@ -79,7 +79,6 @@ class Categories extends Component {
                 <div>
                     <button onClick={this.showModal}>Show category list</button>
                 </div>
-
             </td>)
 
     }

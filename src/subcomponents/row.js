@@ -32,7 +32,6 @@ class Row extends Component {
         } = this.props.propsObj;
 
         const rowFill = row.map((cell, index) => {
-            console.log('row 24', row[25])
             if (index === 2) {
                 productName = cell
             }

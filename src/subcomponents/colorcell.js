@@ -9,22 +9,18 @@ class ClickCellColor extends Component {
             show: false,
             inputValue: '',
             cellValue: this.props.data,
+            style:'white'
         };
-        this.onClick = this.onClick.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
     }
-    onClick() {
-        this.setState({ show: true })
-    }
-
     onSubmit(event) {
         var re=/(red|green|blue|pink|yellow|black|white|gray|red|purple|orange|brown)/
         var testString=this.state.inputValue.toLowerCase().split(',').reduce((accumulator,currentValue)=>{
             return accumulator&&re.test(currentValue)
         },true)
         if(testString){
-            this.setState({cellValue:this.state.inputValue})
+            this.setState({cellValue:this.state.inputValue, style:'gray'})
             var { start, end } = this.props.range
                 writeMultipleRanges(`Sheet2!F${start}:F${end}`, [this.state.inputValue], end - start + 1,'COLUMNS')
         }else{
@@ -41,9 +37,10 @@ class ClickCellColor extends Component {
         if(value='empty'){
             value='—'
         }
+        var style={backgroundColor:this.state.style}
         return (
             
-        <td >
+        <td style={style}>
             {this.state.cellValue}
             <form onSubmit={this.onSubmit}>
                 <label>
