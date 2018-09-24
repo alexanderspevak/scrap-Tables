@@ -20,7 +20,7 @@ class ClickCellColor extends Component {
             return accumulator&&re.test(currentValue)
         },true)
         if(testString){
-            this.setState({cellValue:this.state.inputValue, style:'gray'})
+            this.setState({cellValue:this.state.inputValue, style:'#FFFFE0'})
             var { start, end } = this.props.range
                 writeMultipleRanges(`Sheet2!F${start}:F${end}`, [this.state.inputValue], end - start + 1,'COLUMNS')
         }else{

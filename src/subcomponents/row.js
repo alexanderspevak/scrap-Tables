@@ -79,11 +79,13 @@ class Row extends Component {
                                 setRenderedUrls={this.setRendered}
                             />}
                             <FinishedButton row={sheetRowLessOne + 1} />
-                            {!showAll && <Categories
-                                categories={this.props.categories}
-                                value={row[23]}
-                                range={{ start: sheetRowLessOne + 1, end: columnGroupEndRows[columnGroupIndex] }}
-                            />}
+                            {!showAll &&
+                                <Categories
+                                    categories={this.props.categories}
+                                    value={row[23]}
+                                    objString={row[24]}
+                                    range={{ start: sheetRowLessOne + 1, end: columnGroupEndRows[columnGroupIndex] }}
+                                />}
                         </React.Fragment>
                     )
                 } else if (index === 5 && !showAll) {

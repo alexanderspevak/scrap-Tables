@@ -23,7 +23,6 @@ class ClickCellSize extends Component {
         this.showModal = this.showModal.bind(this)
     }
     showModal(style) {
-        console.log(style)
         this.setState({ showModal: !this.state.showModal })
     }
     onClick(operation) {
@@ -106,7 +105,7 @@ class ClickCellSize extends Component {
                 )
             })
         }
-        var style = (this.state.visitedCell ? { backgroundColor: 'gray' } : { backgroundColor: 'white' })
+        var style = (this.state.visitedCell ? { backgroundColor:"#FFFFE0" } : { backgroundColor: 'white' })
         var productName = this.props.productName
         if (this.state.firstLevelSubmit !== 'empty') {
             productName = (
@@ -140,7 +139,7 @@ class ClickCellSize extends Component {
                         </div>
                     }
                 </Modal>
-                <button onClick={this.showModal.bind(this, style)}> Select Sizes</button>
+                <button onClick={this.showModal.bind(this)}> Select Sizes</button>
             </td>
         )
     }

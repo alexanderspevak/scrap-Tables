@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import SizeCell from '../sizecell'
+import SizeCell from '../sizecell';
 
 const LastVisitedContext = React.createContext();
 

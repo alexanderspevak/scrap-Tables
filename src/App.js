@@ -27,7 +27,6 @@ static getDerivedStateFromProps(nextProps, prevState){
 }
   componentDidMount() {
     window.gapi.load("client", this.initClient);
-
   }
   initClient = () => {
     // 2. Initialize the JavaScript client library.

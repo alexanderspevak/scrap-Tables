@@ -41,7 +41,7 @@ table, th, td {
   
 }
 .pagination:hover{
-  background-color:gray;
+  background-color:#FFFFE0;
 }
 
 .selected {

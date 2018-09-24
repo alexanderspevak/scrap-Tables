@@ -16,7 +16,7 @@ class UrlCell extends Component {
         var { start, end } = this.props.range
         if (this.state.value.includes('http://www.basket-obchod.cz/')) {
             writeMultipleRanges(`Sheet2!G${start}:G${end}`, [this.state.value], end - start + 1,'COLUMNS')
-            this.setState({ show: false,style:'gray' })
+            this.setState({ show: false,style:'#FFFFE0' })
             axios.get(`http://basketobchod-basketobchod.a3c1.starter-us-west-1.openshiftapps.com/test/params?ref=${this.state.value}`)
                 .then((res) => {
                     if (Array.isArray(res.data)) {

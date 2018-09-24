@@ -16,7 +16,7 @@ class ProductName extends Component {
         e.preventDefault();
         let row=this.props.row
         write(`Sheet2!C${row}:C${row}`,this.state.value)
-        this.setState({data:this.state.value,style:'gray'})
+        this.setState({data:this.state.value,style:'#FFFFE0'})
         
       }
       handleChange(event) {
