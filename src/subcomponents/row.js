@@ -67,17 +67,19 @@ class Row extends Component {
                 } else if (index === 6) {
                     return (
                         <React.Fragment key={'Fragment' + index + '' + sheetRowLessOne}>
-                            {showAll && <SizeCell
-                                data={sizes}
-                                range={sheetRowLessOne + 1}
-                                setRenderedSizes={this.setRendered}
-                                productName={productName}
-                            />}
-                            {!showAll && <UrlCell
-                                data={cell}
-                                range={{ start: sheetRowLessOne + 1, end: columnGroupEndRows[columnGroupIndex] }}
-                                setRenderedUrls={this.setRendered}
-                            />}
+                            {showAll &&
+                                <SizeCell
+                                    data={sizes}
+                                    range={sheetRowLessOne + 1}
+                                    setRenderedSizes={this.setRendered}
+                                    productName={productName}
+                                />}
+                            {!showAll &&
+                                <UrlCell
+                                    data={cell}
+                                    range={{ start: sheetRowLessOne + 1, end: columnGroupEndRows[columnGroupIndex] }}
+                                    setRenderedUrls={this.setRendered}
+                                />}
                             <FinishedButton row={sheetRowLessOne + 1} />
                             {!showAll &&
                                 <Categories

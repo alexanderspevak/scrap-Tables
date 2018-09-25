@@ -1,7 +1,7 @@
-
 import React, { Component } from 'react';
 import { writeMultipleRanges } from '../helpers/spreadsheet'
 import { Modal, Button } from 'antd';
+import { Consumer } from '../context/context';
 
 class ClickCellSize extends Component {
     constructor(props) {
@@ -15,7 +15,7 @@ class ClickCellSize extends Component {
             cellValue: this.props.data,
             value: '',
             showModal: false,
-            visitedCell:false
+            visitedCell: false
         };
         this.onClick = this.onClick.bind(this);
         this.onSubmit = this.onSubmit.bind(this);
@@ -45,8 +45,8 @@ class ClickCellSize extends Component {
         const arrayOfEmpty = Array(6).fill('empty')
         const fillArray = [firstLevelSubmit, secondLevelSubmit, thirdLevelSubmit, ...arrayOfEmpty]
         this.props.setRenderedSizes(fillArray, 'sizes');
-        this.setState({ showModal: false,visitedCell:true })
-        
+        this.setState({ showModal: false, visitedCell: true })
+
     }
     handleChange(params, event) {
         this.setState({ [params.key]: event.target.value })
@@ -56,6 +56,7 @@ class ClickCellSize extends Component {
             thirdLevelSubmit = thirdLevelSubmit.replace("{", "")
             thirdLevelSubmit = thirdLevelSubmit.replace("}", "")
             this.setState({ thirdLevelSubmit: thirdLevelSubmit }, () => {
+                params.actions(params.key,this.props.range.start)
                 this.onSubmit()
             })
         }
@@ -88,24 +89,36 @@ class ClickCellSize extends Component {
                 thirdLevelShowed = thirdLevelShowed.replace('{', "")
                 thirdLevelShowed = thirdLevelShowed.replace('}', "")
                 return (
-                    <div>
-                        <form key={'secondLevel' + index}>
-                            <div>
-                                <label>
-                                    <input type="radio"
-                                        value={level.title}
-                                        checked={this.state.secondLevelSubmit === level.title}
-                                        onChange={this.handleChange.bind(this, { key: 'secondLevelSubmit', value: level })}
-                                    />
-                                    <span style={{ fontWeight: "bold" }}>{level.title}:</span>{thirdLevelShowed}
-                                </label>
-                            </div>
-                        </form>
-                    </div>
+                    <Consumer>
+                        {({ actions, state }) => {
+                            if (state.sizeCellRow === this.props.range.start) {
+                                var style = { backgroundColor: '#FFFFE0' }
+                            } else {
+                                var style = { backgroundColor: 'white' }
+                            }
+                            return (
+                                <div>
+                                    <form key={'secondLevel' + index}>
+                                        <div>
+                                            <label>
+                                                <input type="radio"
+                                                    value={level.title}
+                                                    checked={this.state.secondLevelSubmit === level.title}
+                                                    onChange={this.handleChange.bind(this, { key: 'secondLevelSubmit', value: level,actions:actions.setStyle,key:'sizeCellRow' })}
+                                                />
+                                                <span style={{ fontWeight: "bold" }}>{level.title}:</span>{thirdLevelShowed}
+                                            </label>
+                                        </div>
+                                    </form>
+                                </div>
+                            )
+                        }
+                        }
+                    </Consumer>
                 )
             })
         }
-        var style = (this.state.visitedCell ? { backgroundColor:"#FFFFE0" } : { backgroundColor: 'white' })
+        var style = (this.state.visitedCell ? { backgroundColor: "#FFFFE0" } : { backgroundColor: 'white' })
         var productName = this.props.productName
         if (this.state.firstLevelSubmit !== 'empty') {
             productName = (

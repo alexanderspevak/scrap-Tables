@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { writeMultipleRanges } from '../helpers/spreadsheet'
+import { Consumer } from '../context/context';  
 import { Modal, Checkbox } from 'antd';
-
 
 class Categories extends Component {
     constructor(props) {
@@ -17,25 +17,26 @@ class Categories extends Component {
         this.onOk = this.onOk.bind(this)
     }
 
-    onOk() {
+    onOk(callBack,key) {
+        callBack(key,this.props.range.start)
         const { sendValues } = this.state;
         const { start, end } = this.props.range
         const idArr = sendValues.map(obj => {
             return Object.keys(obj)[0]
         })
         let titleString = sendValues.map((obj, index) => {
-             return obj[idArr[index]]
+            return obj[idArr[index]]
         }).join('/')
         this.setState({ categoryTitle: titleString })
         let idTitleObjectsString = sendValues.reduce((previousValue, currentValue) => {
             return previousValue + '/' + JSON.stringify(currentValue)
         }, '')
-        if(titleString===''){
+        if (titleString === '') {
             writeMultipleRanges(`Sheet2!X${start}:Y${end}`, ['empty', 'empty'], end - start + 1, 'COLUMNS')
-            this.setState({categoryTitle:''})
-        }else{
+            this.setState({ categoryTitle: '' })
+        } else {
             writeMultipleRanges(`Sheet2!X${start}:Y${end}`, [titleString, idTitleObjectsString.substring(1)], end - start + 1, 'COLUMNS')
-        }   
+        }
         this.setState({ style: true })
         this.showModal()
     }
@@ -79,7 +80,7 @@ class Categories extends Component {
             if (category.children && category.children.length > 0) {
                 children = this.prepareCategoriesForRender(category, margin)
             }
-            return (<div style={{ lineHeight:0 }}>
+            return (<div style={{ lineHeight: 0 }}>
                 <form key={category.id}>
                     <div style={{ marginLeft: margin }}>
                         <Checkbox
@@ -105,7 +106,6 @@ class Categories extends Component {
             }
             this.setState({ checked: newChecked, sendValues: objArr })
         }
-
         this.setState({ showModal: !this.state.showModal })
     }
     render() {
@@ -120,25 +120,37 @@ class Categories extends Component {
         var categories = this.props.categories;
         var renderedCategories = this.prepareCategoriesForRender(categories, -50)
         return (
-            <td style={style}>
-                {this.state.categoryTitle ? this.state.categoryTitle : value}
-                <Modal
-                    title={'Select Category'}
-                    visible={this.state.showModal}
-                    onCancel={this.showModal}
-                    onOk={this.onOk}
-                    width={1000}
-                >
-                    {
-                        <div>
-                            {renderedCategories}
-                        </div>
+            <Consumer>
+                {({ actions, state }) => {
+                    if (state.categoryCellRow === this.props.range.start) {
+                        var style = { backgroundColor: '#FFFFE0' }
+                    } else {
+                        var style = { backgroundColor: 'white' }
                     }
-                </Modal>
-                <div>
-                    <button onClick={this.showModal}>Show category list</button>
-                </div>
-            </td>)
+                    return (
+                        <td style={style}>
+                            {this.state.categoryTitle ? this.state.categoryTitle : value}
+                            <Modal
+                                title={'Select Category'}
+                                visible={this.state.showModal}
+                                onCancel={this.showModal}
+                                onOk={this.onOk.bind(this, actions.setStyle, 'categoryCellRow')}
+                                width={1000}
+                            >
+                                {
+                                    <div>
+                                        {renderedCategories}
+                                    </div>
+                                }
+                            </Modal>
+                            <div>
+                                <button onClick={this.showModal}>Show category list</button>
+                            </div>
+                        </td>)
+                }
+                }
+            </Consumer>
+        )
     }
-}
+};
 export default Categories;
