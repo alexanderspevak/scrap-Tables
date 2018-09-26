@@ -31,9 +31,7 @@ table, th, td {
   border: 1px solid black;
   
 }
-table {
-  table-layout: fixed;
-}
+
 .pagination {
     cursor: pointer; 
     float:left;
