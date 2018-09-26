@@ -13,8 +13,8 @@ class Img extends Component {
             checker=false
         }
         return (
-            <td >
-                {checker?<img src={data} alt={data} style={{ width: "100px" }}/>:'–'}
+            <td  style={{ width: "150px", whiteSpace: 'unset'}} >
+                {checker?<img src={data} alt={'missing pic'} style={{ width: "100px" }}/>:'–'}
             </td>
         )
     }

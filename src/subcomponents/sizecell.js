@@ -49,14 +49,15 @@ class ClickCellSize extends Component {
 
     }
     handleChange(params, event) {
+        (' event target value',event.target.value)
         this.setState({ [params.key]: event.target.value })
         if (params.value) {
             var thirdLevelSubmit = JSON.stringify(params.value.value.cs)
             thirdLevelSubmit = thirdLevelSubmit.replace(/\"/g, "")
             thirdLevelSubmit = thirdLevelSubmit.replace("{", "")
             thirdLevelSubmit = thirdLevelSubmit.replace("}", "")
-            this.setState({ thirdLevelSubmit: thirdLevelSubmit }, () => {
-                params.actions(params.key,this.props.range.start)
+            this.setState({ thirdLevelSubmit: thirdLevelSubmit,secondLevelSubmit:params.value.title }, () => {
+                params.actions(params.key, this.props.range.start)
                 this.onSubmit()
             })
         }
@@ -96,6 +97,7 @@ class ClickCellSize extends Component {
                             } else {
                                 var style = { backgroundColor: 'white' }
                             }
+                            console.log(level,' level')
                             return (
                                 <div>
                                     <form key={'secondLevel' + index}>
@@ -104,7 +106,7 @@ class ClickCellSize extends Component {
                                                 <input type="radio"
                                                     value={level.title}
                                                     checked={this.state.secondLevelSubmit === level.title}
-                                                    onChange={this.handleChange.bind(this, { key: 'secondLevelSubmit', value: level,actions:actions.setStyle,key:'sizeCellRow' })}
+                                                    onChange={this.handleChange.bind(this, { key: 'secondLevelSubmit', value: level, actions: actions.setStyle, key: 'sizeCellRow' })}
                                                 />
                                                 <span style={{ fontWeight: "bold" }}>{level.title}:</span>{thirdLevelShowed}
                                             </label>

@@ -94,10 +94,11 @@ class Row extends Component {
                     return (<ColorsCell key={'colorsCell' + index} data={cell} range={{ start: sheetRowLessOne + 1, end: columnGroupEndRows[columnGroupIndex] }} />)
                 } else if (index === 2) {
                     return (<ProductName row={sheetRowLessOne + 1} data={cell} key={'ProductName' + sheetRowLessOne} />)
-                } else if (index > 6 && index < 10) {
+                } else if (index > 6 && index < 10 && showAll) {
                     return (<SizeSpecifics data={cell} stateImages={this.state.sizes} index={index - 7} />)
+                } else if (index < 3) {
+                    return (<td key={index}>{cell}</td>)
                 }
-                return (<td key={index}>{cell}</td>)
             }
             return undefined
         }).filter((a) => typeof a !== 'undefined');
