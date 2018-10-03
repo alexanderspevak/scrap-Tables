@@ -43,7 +43,8 @@ static getDerivedStateFromProps(nextProps, prevState){
         this.setState({ auth })
         // 3. Initialize and make the API request.
         load(this.onLoad);
-      });
+      })
+ 
   };
   onLoad = (data, error) => {
     if (data) {

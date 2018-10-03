@@ -25,10 +25,20 @@ export function write(range, values) {
     valueInputOption: 'RAW',
     resource: { values: [[values]] }
   }).then((response) => {
-
     var result = response.result;
     console.log(`${result.updatedCells} cells updated.`);
-  });
+  })
+  .catch((error) => { 
+    if(error.result.error&&error.result.error.code === 401){
+      alert('you are not logged in')
+      // window.gapi.auth2.getAuthInstance().signIn();
+    }
+    if(error.result.error&&error.result.error.code === 403){
+      alert('you are not logged in to authenticated account')
+      // await window.gapi.auth2.getAuthInstance().signOut();
+      // window.gapi.auth2.getAuthInstance().signIn();
+    }
+  });;
 }
 
 export function writeMultipleRanges(range, values, size, fillType) {
@@ -46,7 +56,15 @@ export function writeMultipleRanges(range, values, size, fillType) {
     var result = response.result;
     console.log(`${result.totalUpdatedCells} cells updated.`);
   })
-    .catch(({ result }) => {
-      console.log('error', result)
+    .catch((error) => { 
+      if(error.result.error&&error.result.error.code === 401){
+        alert('you are not logged in')
+        // window.gapi.auth2.getAuthInstance().signIn();
+      }
+      if(error.result.error&&error.result.error.code === 403){
+        alert('you are not logged in to authenticated account')
+        // await window.gapi.auth2.getAuthInstance().signOut();
+        // window.gapi.auth2.getAuthInstance().signIn();
+      }
     });
 }
