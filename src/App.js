@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import config from './config.js'
 import { load } from './helpers/spreadsheet'
-import {  Row } from './subcomponents';
+import { Row } from './subcomponents';
 
 
 class App extends Component {
@@ -17,14 +17,14 @@ class App extends Component {
       page: 1,
     };
   }
-static getDerivedStateFromProps(nextProps, prevState){
-  var showAll=nextProps.location.pathname.split('/')[1]==='sizes'?true:false
-  var page=parseInt(nextProps.location.pathname.split('/')[2],10); 
-  if(showAll!==prevState.showAll||page!==prevState.page){
-    return { showAll,page};
- }
- else return null;
-}
+  static getDerivedStateFromProps(nextProps, prevState) {
+    var showAll = nextProps.location.pathname.split('/')[1] === 'sizes' ? true : false
+    var page = parseInt(nextProps.location.pathname.split('/')[2], 10);
+    if (showAll !== prevState.showAll || page !== prevState.page) {
+      return { showAll, page };
+    }
+    else return null;
+  }
   componentDidMount() {
     window.gapi.load("client", this.initClient);
   }
@@ -44,7 +44,7 @@ static getDerivedStateFromProps(nextProps, prevState){
         // 3. Initialize and make the API request.
         load(this.onLoad);
       })
- 
+
   };
   onLoad = (data, error) => {
     if (data) {
@@ -54,13 +54,13 @@ static getDerivedStateFromProps(nextProps, prevState){
     }
   };
   showAll() {
-    var colorsSizes=this.state.showAll?'colors':'sizes'
-    var url=`/${colorsSizes}/${this.state.page}`
+    var colorsSizes = this.state.showAll ? 'colors' : 'sizes'
+    var url = `/${colorsSizes}/${this.state.page}`
     this.props.history.push(url)
   }
-  setPage(page){
-    var colorsSizes=this.state.showAll?'sizes':'colors'
-    var url=`/${colorsSizes}/${page}`
+  setPage(page) {
+    var colorsSizes = this.state.showAll ? 'sizes' : 'colors'
+    var url = `/${colorsSizes}/${page}`
     this.props.history.push(url)
   }
   render() {
@@ -77,48 +77,48 @@ static getDerivedStateFromProps(nextProps, prevState){
     columnGroupEndRows.push(6765)
     prevRowKod = null
     const tableFill = data.map((row, sheetRowLessOne) => {
-        if ((row[0] !== prevRowKod) || this.state.showAll) {
-          columnGroupIndex++
-          prevRowKod = row[0]
-          var finishedSelector=row.filter((cell)=>{
-            return cell==='finished'
-          })[0]
-         if(!finishedSelector){
-          var propsObj={
+      if ((row[0] !== prevRowKod) || this.state.showAll) {
+        columnGroupIndex++
+        prevRowKod = row[0]
+        var finishedSelector = row.filter((cell) => {
+          return cell === 'finished'
+        })[0]
+        if (!finishedSelector) {
+          var propsObj = {
             row,
             sheetRowLessOne,
             columnGroupEndRows,
             columnGroupIndex,
-            showAll:this.state.showAll,
-            sizes:this.props.sizes
+            showAll: this.state.showAll,
+            sizes: this.props.sizes
           }
           return (
-              <Row propsObj={propsObj} key={'Row'+sheetRowLessOne+prevRowKod} categories={this.props.categories}/>
-            )
+            <Row propsObj={propsObj} key={'Row' + sheetRowLessOne + prevRowKod} categories={this.props.categories} />
+          )
         }
         return undefined;
       }
       return undefined
     }).filter((a) => typeof a !== 'undefined')
-    let paginatedTableFill=tableFill.slice((this.state.page-1)*this.state.sheetRowsPerPage,this.state.page *this.state.sheetRowsPerPage)
-    var paginationItemsCount=Math.ceil(tableFill.length/this.state.sheetRowsPerPage)
-    var paginationItems=[...Array(paginationItemsCount)].map((_ , index)=>{
+    let paginatedTableFill = tableFill.slice((this.state.page - 1) * this.state.sheetRowsPerPage, this.state.page * this.state.sheetRowsPerPage)
+    var paginationItemsCount = Math.ceil(tableFill.length / this.state.sheetRowsPerPage)
+    var paginationItems = [...Array(paginationItemsCount)].map((_, index) => {
       return (
-      <li 
-        key={'li'+index} 
-        className={this.state.page===index+1?"pagination selected":"pagination"} 
-        onClick={this.setPage.bind(this,index+1)}>{index+1}
-      </li>)
+        <li
+          key={'li' + index}
+          className={this.state.page === index + 1 ? "pagination selected" : "pagination"}
+          onClick={this.setPage.bind(this, index + 1)}>{index + 1}
+        </li>)
     })
     if (error) {
       return <div>{this.state.error}</div>;
     }
     return (
       <div>
-        <button 
+        <button
           onClick={this.showAll.bind(this)}
         >
-          {this.state.showAll ? 'switch to colors and pictures' : 'switch to sizes'}   
+          {this.state.showAll ? 'switch to colors and pictures' : 'switch to sizes'}
         </button>
         <table key={'main table'}>
           <tbody key={'tbody'}>
@@ -126,7 +126,7 @@ static getDerivedStateFromProps(nextProps, prevState){
           </tbody>
         </table>
         <div>
-           <ul>{paginationItems}</ul>
+          <ul>{paginationItems}</ul>
         </div>
       </div>
     );
